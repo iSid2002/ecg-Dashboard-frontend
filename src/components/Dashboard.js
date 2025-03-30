@@ -44,10 +44,10 @@ const Dashboard = () => {
     setLoading(prev => ({ ...prev, generateECG: true }));
     setError(null);
     try {
-      const response = await axios.post('/api/generate-ecg');
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/generate-ecg`);
       setEcgData(response.data);
     } catch (err) {
-      setError('Failed to generate ECG data');
+      setError('Failed to generate ECG');
       console.error(err);
     } finally {
       setLoading(prev => ({ ...prev, generateECG: false }));
@@ -58,7 +58,7 @@ const Dashboard = () => {
     setLoading(prev => ({ ...prev, trainModel: true }));
     setError(null);
     try {
-      const response = await axios.post('/api/train-model');
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/train-model`);
       setModelMetrics(response.data);
     } catch (err) {
       setError('Failed to train model');
@@ -78,7 +78,7 @@ const Dashboard = () => {
     setError(null);
     try {
       const ecgSignal = activeTab === 0 ? ecgData.normal_ecg : ecgData.abnormal_ecg;
-      const response = await axios.post('/api/calculate-heart-failure-risk', ecgSignal);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/calculate-heart-failure-risk`, ecgSignal);
       setRiskData(response.data);
     } catch (err) {
       setError('Failed to calculate heart failure risk');
@@ -92,7 +92,7 @@ const Dashboard = () => {
     setLoading(prev => ({ ...prev, viewChart: true }));
     setError(null);
     try {
-      const response = await axios.get('/api/plot-ecg');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/plot-ecg`);
       setEcgChart(response.data);
     } catch (err) {
       setError('Failed to fetch ECG chart');
@@ -110,7 +110,7 @@ const Dashboard = () => {
   const handleAbnormalityLevelChange = async (event, newValue) => {
     setAbnormalityLevel(newValue);
     try {
-      await axios.post('/api/set-abnormality-level', { level: newValue });
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/set-abnormality-level`, { level: newValue });
     } catch (err) {
       setError('Failed to set abnormality level');
       console.error(err);
